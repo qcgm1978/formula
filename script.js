@@ -1,6 +1,13 @@
 // Sup globals. Fight me.
 let model;
-let plotData = {training: {x:[], y:[]}, predictions: {x:[], y:[]}};
+let trainingData = {x:[], y:[]};
+let predictionData = {x:[], y:[]};
+
+// Step 1. Set up the variables we're trying to learn.
+const a = tf.variable(tf.scalar(Math.random()));
+const b = tf.variable(tf.scalar(Math.random()));
+const c = tf.variable(tf.scalar(Math.random()));
+const d = tf.variable(tf.scalar(Math.random()));
 
 init();
 
@@ -8,13 +15,7 @@ function init() {
   // We generated some data according to a formula that's up to cubic, so we want
   // to learn the coefficients for
   // y = a * x ^ 3 + b * x^2 + c * x + d
-  plotData.training = generateData(10, {a: 0, b:3, c:10, d:4});
-  
-  // Step 1. Set up the variables we're trying to learn.
-  const a = tf.variable(tf.scalar(Math.random()));
-  const b = tf.variable(tf.scalar(Math.random()));
-  const c = tf.variable(tf.scalar(Math.random()));
-  const d = tf.variable(tf.scalar(Math.random()));
+  trainingData = generateData(10, {a: 0, b:3, c:10, d:4});
   
   // See what our predictions would look like with random coefficients
   const tempCoeff = {
@@ -24,44 +25,44 @@ function init() {
     d: d.dataSync()[0],
   };
   
-  plotData.predictions = generateData(10, tempCoeff);
+  predictionData = generateData(10, tempCoeff);
   
   plot();
-  
-  //doALearning();
 }
 
 function plot() {
   const trace1 = {
-    x: plotData.training.x,
-    y: plotData.training.y,
+    x: trainingData.x,
+    y: trainingData.y,
     mode: 'lines+markers',
     name: 'Training',
     marker: { size: 12, color:'#29B6F6' }
   };
 
   const trace2 = {
-    x: plotData.predictions.x,
-    y: plotData.predictions.y,
+    x: predictionData.x,
+    y: predictionData.y,
     mode: 'markers',
     name: 'Prediction',
     marker: { size: 12, color: '#F06292' }
   };
   
   const layout = {
-    margin: {l: 0, r: 0, b: 0, t: 0, pad:5},
+    margin: {
+      l: 30, r: 0, b: 0, t: 0, 
+      pad:0
+    },
     legend: {
-				xanchor:"left",//"auto" | "left" | "center" | "right"
-				yanchor:"top",//"auto" | "top" | "middle" | "bottom"
-				y:1,//number between or equal to -2 and 3
-				x:1,//number between or equal to -2 and 3
+				xanchor:"center",
+				yanchor:"top",
+				y:1,//number between or equal to -2 and 3,
+        x: 0,
 				orientation: "v"
 	  },
   };
   Plotly.newPlot('graph', [trace1, trace2], layout, {scrollZoom: true, displayModeBar: false});
 }  
   
-
 function generateData(points, {a, b, c, d}) {
   let x = [];
   let y = [];
@@ -74,25 +75,19 @@ function generateData(points, {a, b, c, d}) {
 }
 
 // Based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
-function doALearning() {
-  
-  
-  debugger
-  // See what the predictions look like with random coefficients
-  
-  const predictionsBefore = predict(trainingData.xs);
-  
-  
-  // Step 2. Create an optimizer, we will use this later. You can play
+async function doALearning() {
+  // Create an optimizer, we will use this later. You can play
   // with some of these values to see how the model perfoms.
   const numIterations = 75;
   const learningRate = 0.5;
   const optimizer = tf.train.sgd(learningRate); 
   
-  // Step 3. Write our training process functions.
+  await train(trainingData.x, trainingData.y, numIterations);
   
+  // Training process functions.
   // This predicts a value
   function predict(x) {
+    debugger
     // y = a * x ^ 3 + b * x ^ 2 + c * x + d
     return tf.tidy(() => {
       return a.mul(x.pow(tf.scalar(3, 'int32')))
@@ -131,10 +126,9 @@ function doALearning() {
       await tf.nextFrame();
     }
   }
-  
-  
-  
 }
+
+
 
 
 
