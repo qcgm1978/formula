@@ -25,7 +25,7 @@ function plot() {
   
 function init() {
   // Training data
-  const training = generateData(50);
+  const training = generateData(10);
   plotData.training = training;
 
   learn(training.x, training.y);  
@@ -37,7 +37,7 @@ function generateData(points) {
   
   for (let i = 0; i < points; i++) {
     x[i] = i;
-    y[i] = x[i];
+    y[i] = x[i] * x[i];
   }
   
   return {x:x, y:y}
@@ -64,7 +64,7 @@ function predict(what) {
   }
   
   // Use the model to do inference on a data point the model hasn't seen before:
-  const prediction = model.predict(tf.tensor2d([what], [1, 1])).asScalar();
+  const prediction = model.predict(tf.tensor2d([what], [1, 1]));
   console.log(prediction);
   
   plotData.prediction.x.push(what);

@@ -8,7 +8,6 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.0"> </script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <link rel="stylesheet" href="/style.css">  
     <script src="/script.js" defer></script>
     
     <style>
@@ -41,12 +40,14 @@
         border: none;
         cursor: pointer;
       }
-        
+      h1 {
+        font-style: italic;
+        color: #29B6F6;
+      }
     </style>
   </head>  
   <body>
     <header><h1>hello tensor flow</h1></header>
-    <h3>Training data</h3>
     
     <input type="number" placeholder="Predict a value" id="input" onchange="predict()">
     <button onclick="predict()">Predict</button>
