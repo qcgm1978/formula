@@ -1,53 +1,31 @@
-go();
+let MODEL;
+init();
 
-function plot(training, prediction) {
-  const trace1 = {
-    x: training.x,
-    y: training.y,
-    mode: 'lines+markers',
-    name: 'Training Data',
-    marker: { size: 12, color: '#29B6F6' }
+function plot(data, isTraining) {
+  const trace = {
+    x: data.x,
+    y: data.y,
+    mode: isTraining ? 'lines+markers' : 'markers',
+    name: isTraining ? 'Training' : 'Prediction',
+    marker: { size: 12, color: isTraining ? '#29B6F6' : '#F06292' }
   };
   
-   
-  // Plot it.
-  const trace2 = {
-    x: predictions.x,
-    y: predictions.y,
-    mode: 'markers',
-    name: 'Guess',
-    marker: { size: 12, color: '#F06292' }
-  };
-
-  Plotly.newPlot('graph', [trace1, trace2], layout);
-
-}
-
-const predictions = { x: [], y: []};
-
-// Plot for it.
-const trace = {
-  x: training.x,
-  y: training.y,
-  mode: 'lines+markers',
-  name: 'Training Data',
-  marker: { size: 12, color: '#29B6F6' }
-};
-
-var layout = {};
-}
+  Plotly.addTraces('graph', trace);
+}  
   
+function init() {
+  Plotly.newPlot('graph', [], {});
   
-function go() {
   // Training data
   const training = {
     x: [1, 2, 3, 4],
     y: [5, 12, 8, 10]  
   }
-  plot(training);
+  plot(training, true);
   
-  const model = learn(training.x, training.y);  
-  predict(model);
+  MODEL = learn(training.x, training.y);  
+  //const prediction = guess(model, 5);
+  //plot(prediction, false);
 }
 
 
@@ -62,20 +40,22 @@ function learn(xData, yData) {
   // Generate some synthetic data for training.
   const xs = tf.tensor2d(xData, [4, 1]);
   const ys = tf.tensor2d(yData, [4, 1]);
-
-  model.fit(xs, ys).then(() => predict(5));
+  model.fit(xs, ys);
+  
+  //model.fit(xs, ys).then(() => predict(5));
   return model;
 }
 
-function predict(model, what) {
+function predict(what) {
   if (!what) {
     what = document.getElementById('input').value;
   }
+  debugger
   
   // Use the model to do inference on a data point the model hasn't seen before:
-  const prediction = model.predict(tf.tensor2d([what], [1, 1])).asScalar();
-  
-  predictions.x.push(what);
-  predictions.y.push(prediction.get());
+  const prediction = MODEL.predict(tf.tensor2d([what], [1, 1])).asScalar();
+  plot({x: what, y: prediction.get()}, false);
+  // predictions.x.push(what);
+  // predictions.y.push(prediction.get());
  
 }
