@@ -60,7 +60,7 @@ function plot() {
 				orientation: "v"
 	  },
   };
-  Plotly.newPlot('graph', [trace1, trace2], layout, {scrollZoom: true, displayModeBar: false});
+  Plotly.newPlot('graph', [trace1, trace2], layout, {displayModeBar: false});
 }  
   
 function generateData(points, {a, b, c, d}) {
@@ -84,26 +84,6 @@ async function doALearning() {
   
   await train(trainingData.x, trainingData.y, numIterations);
   
-  // Training process functions.
-  // This predicts a value
-  function predict(x) {
-    debugger
-    // y = a * x ^ 3 + b * x ^ 2 + c * x + d
-    return tf.tidy(() => {
-      return a.mul(x.pow(tf.scalar(3, 'int32')))
-        .add(b.mul(x.square()))
-        .add(c.mul(x))
-        .add(d);
-    });
-  }
-  
-  // This tells you how good the prediction is based on what you expected.
-  function loss(prediction, labels) {
-    // Having a good error function is key for training a machine learning model
-    const error = prediction.sub(labels).square().mean();
-    return error;
-  }
-  
   // This trains the model.
   async function train(xs, ys, numIterations) {
     for (let iter = 0; iter < numIterations; iter++) {
@@ -118,6 +98,7 @@ async function doALearning() {
       // loss.
       optimizer.minimize(() => {
         // Feed the examples into the model
+        console.log('calling predict', xs);
         const pred = predict(xs);
         return loss(pred, ys);
       });
@@ -126,6 +107,26 @@ async function doALearning() {
       await tf.nextFrame();
     }
   }
+  
+  // Training process functions.
+  // This predicts a value
+  function predict(xs) {
+    // y = a * x ^ 3 + b * x ^ 2 + c * x + d
+    return tf.tidy((x) => {
+      return a.mul(x.pow(tf.scalar(3, 'int32')))
+        .add(b.mul(x.square()))
+        .add(c.mul(x))
+        .add(d);
+    });
+  }
+  
+  // This tells you how good the prediction is based on what you expected.
+  function loss(prediction, labels) {
+    // Having a good error function is key for training a machine learning model
+    const error = prediction.sub(labels).square().mean();
+    return error;
+  }
+  
 }
 
 
