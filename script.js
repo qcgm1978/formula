@@ -47,7 +47,18 @@ function plot() {
     name: 'Prediction',
     marker: { size: 12, color: '#F06292' }
   };
-  Plotly.newPlot('graph', [trace1, trace2], {}, {scrollZoom: true});
+  
+  const layout = {
+    margin: {l: 0, r: 0, b: 0, t: 0, pad:5},
+    legend: {
+				xanchor:"left",//"auto" | "left" | "center" | "right"
+				yanchor:"top",//"auto" | "top" | "middle" | "bottom"
+				y:1,//number between or equal to -2 and 3
+				x:1,//number between or equal to -2 and 3
+				orientation: "v"
+	  },
+  };
+  Plotly.newPlot('graph', [trace1, trace2], layout, {scrollZoom: true, displayModeBar: false});
 }  
   
 
