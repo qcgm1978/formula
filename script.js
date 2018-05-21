@@ -1,4 +1,4 @@
-let MODEL;
+let model;
 init();
 
 function plot(data, isTraining) {
@@ -10,7 +10,10 @@ function plot(data, isTraining) {
     marker: { size: 12, color: isTraining ? '#29B6F6' : '#F06292' }
   };
   
-  Plotly.addTraces('graph', trace);
+  if (isTraining) {
+    Plotly.addTraces('graph', trace);
+  }
+  //Plotly.extendTraces('graph', trace, [0]);
 }  
   
 function init() {
@@ -22,8 +25,9 @@ function init() {
     y: [5, 12, 8, 10]  
   }
   plot(training, true);
+  plot({x:0, y:0}, false);
   
-  MODEL = learn(training.x, training.y);  
+  learn(training.x, training.y);  
   //const prediction = guess(model, 5);
   //plot(prediction, false);
 }
@@ -31,7 +35,7 @@ function init() {
 
 function learn(xData, yData) {
   // Define a model for linear regression.
-  const model = tf.sequential();
+  model = tf.sequential();
   model.add(tf.layers.dense({units: 1, inputShape: [1]}));
 
   // Prepare the model for training: Specify the loss and the optimizer.
@@ -53,8 +57,8 @@ function predict(what) {
   debugger
   
   // Use the model to do inference on a data point the model hasn't seen before:
-  const prediction = MODEL.predict(tf.tensor2d([what], [1, 1])).asScalar();
-  plot({x: what, y: prediction.get()}, false);
+  const prediction = model.predict(tf.tensor2d([what], [1, 1])).asScalar();
+  plot({x: [what], y: [prediction.get()]}, false);
   // predictions.x.push(what);
   // predictions.y.push(prediction.get());
  
