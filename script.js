@@ -15,7 +15,7 @@ function init() {
   // We generated some data according to a formula that's up to cubic, so we want
   // to learn the coefficients for
   // y = a * x ^ 3 + b * x^2 + c * x + d
-  trainingData = generateData(10, {a: 1, b:3, c:10, d:4});
+  trainingData = generateData(10, {a: 0, b:3, c:10, d:4});
   
   // See what our predictions would look like with random coefficients
   const tempCoeff = {
@@ -67,9 +67,21 @@ function generateData(points, {a, b, c, d}) {
   let y = [];
   
   for (let i = 0; i < points; i++) {
-    x[i] = i;
-    y[i] = a * i*i*i + b * i*i + c * i + d;
+    const val = i;
+    x[i] = val;
+    y[i] = a * (val*val*val) + b * (val*val) + c * val + d;
   }
+  
+  // Normalize the y values to the range 0 to 1.
+  const ymin = Math.min(...y);
+  const ymax = Math.max(...y);
+  const yrange = ymax - ymin;
+  
+  for (let i = 0; i < points; i++) {
+    const val = y[i];
+    y[i] = (y[i] - ymin) / yrange;
+  }
+  
   return {x:x, y:y}
 }
 
@@ -100,6 +112,7 @@ async function doALearning() {
   
   // This trains the model.
   async function train(xs, ys, numIterations) {
+    debugger
     for (let iter = 0; iter < numIterations; iter++) {
       // optimizer.minimize is where the training happens.
 
