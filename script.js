@@ -1,37 +1,48 @@
+// Sup globals. Fight me.
 let model;
+let plotData = {training: {x:[], y:[]}, prediction: {x:[], y:[]}};
+
 init();
 
-function plot(data, isTraining) {
-  const trace = {
-    x: data.x,
-    y: data.y,
-    mode: isTraining ? 'lines+markers' : 'markers',
-    name: isTraining ? 'Training' : 'Prediction',
-    marker: { size: 12, color: isTraining ? '#29B6F6' : '#F06292' }
+function plot() {
+  const trace1 = {
+    x: plotData.training.x,
+    y: plotData.training.y,
+    mode: 'lines+markers',
+    name: 'Training',
+    marker: { size: 12, color:'#29B6F6' }
   };
-  
-  if (isTraining) {
-    Plotly.addTraces('graph', trace);
-  }
-  //Plotly.extendTraces('graph', trace, [0]);
+
+  const trace2 = {
+    x: plotData.prediction.x,
+    y: plotData.prediction.y,
+    mode: 'markers',
+    name: 'Prediction',
+    marker: { size: 12, color: '#F06292' }
+  };
+  Plotly.newPlot('graph', [trace1, trace2], {});
 }  
   
 function init() {
-  Plotly.newPlot('graph', [], {});
-  
   // Training data
-  const training = {
-    x: [1, 2, 3, 4],
-    y: [5, 12, 8, 10]  
-  }
-  plot(training, true);
-  plot({x:0, y:0}, false);
-  
+  const training = generateData(100);
+  plotData.training = training;
+  plot();
+
   learn(training.x, training.y);  
-  //const prediction = guess(model, 5);
-  //plot(prediction, false);
 }
 
+function generateData(points) {
+  let x = [];
+  let y = [];
+  
+  for (let i = 0; i < points; i++) {
+    x[i] = i;
+    y[i] = x[i];
+  }
+  
+  return {x:x, y:y}
+}
 
 function learn(xData, yData) {
   // Define a model for linear regression.
@@ -42,11 +53,9 @@ function learn(xData, yData) {
   model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
 
   // Generate some synthetic data for training.
-  const xs = tf.tensor2d(xData, [4, 1]);
-  const ys = tf.tensor2d(yData, [4, 1]);
+  const xs = tf.tensor2d(xData, [xData.length, 1]);
+  const ys = tf.tensor2d(yData, [yData.length, 1]);
   model.fit(xs, ys);
-  
-  //model.fit(xs, ys).then(() => predict(5));
   return model;
 }
 
@@ -54,12 +63,10 @@ function predict(what) {
   if (!what) {
     what = document.getElementById('input').value;
   }
-  debugger
   
   // Use the model to do inference on a data point the model hasn't seen before:
   const prediction = model.predict(tf.tensor2d([what], [1, 1])).asScalar();
-  plot({x: [what], y: [prediction.get()]}, false);
-  // predictions.x.push(what);
-  // predictions.y.push(prediction.get());
- 
+  plotData.prediction.x.push(what);
+  plotData.prediction.y.push(prediction.get());
+  plot();
 }
