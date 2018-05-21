@@ -49,12 +49,15 @@
   <body>
     <header><h1>hello tensor flow</h1></header>
     
-    <input type="number" placeholder="Predict a value" id="input" onchange="predict()">
-    <button onclick="predict()">Predict</button>
-    
     <body>
       <div id="graph"></div>
     </body>
+    
+    <button onclick="doALearning()">Learn!</button>
+    <br>
+    
+    <input type="number" placeholder="Predict a value" id="input" onchange="predict()">
+    <button onclick="predict()">Predict</button>
     
     <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
     <script src="https://button.glitch.me/button.js"></script>

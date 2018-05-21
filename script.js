@@ -1,20 +1,14 @@
 // Sup globals. Fight me.
 let model;
-let plotData = {training: {x:[], y:[]}, prediction: {x:[], y:[]}};
+let plotData = {training: {x:[], y:[]}, predictions: {x:[], y:[]}};
 
 init();
-
 
 function init() {
   // We generated some data according to a formula that's up to cubic, so we want
   // to learn the coefficients for
   // y = a * x ^ 3 + b * x^2 + c * x + d
-  
-  const training = generateData(10);
-  plotData.training = training;
-  
-  
-  
+  plotData.training = generateData(10, {a: 0, b:3, c:10, d:4});
   
   // Step 1. Set up the variables we're trying to learn.
   const a = tf.variable(tf.scalar(Math.random()));
@@ -22,6 +16,7 @@ function init() {
   const c = tf.variable(tf.scalar(Math.random()));
   const d = tf.variable(tf.scalar(Math.random()));
   
+  // See what our predictions would look like with random coefficients
   const tempCoeff = {
     a: a.dataSync()[0],
     b: b.dataSync()[0],
@@ -29,8 +24,11 @@ function init() {
     d: d.dataSync()[0],
   };
   
+  plotData.predictions = generateData(10, tempCoeff);
   
-  doALearning();
+  plot();
+  
+  //doALearning();
 }
 
 function plot() {
@@ -43,23 +41,17 @@ function plot() {
   };
 
   const trace2 = {
-    x: plotData.prediction.x,
-    y: plotData.prediction.y,
+    x: plotData.predictions.x,
+    y: plotData.predictions.y,
     mode: 'markers',
     name: 'Prediction',
     marker: { size: 12, color: '#F06292' }
   };
-  Plotly.newPlot('graph', [trace1, trace2], {});
+  Plotly.newPlot('graph', [trace1, trace2], {}, {scrollZoom: true});
 }  
   
 
-function generateData(points) {
-  // True coefficients
-  const a = 0;
-  const b = 3;
-  const c = 10; 
-  const d = -4;
-  
+function generateData(points, {a, b, c, d}) {
   let x = [];
   let y = [];
   
@@ -67,7 +59,6 @@ function generateData(points) {
     x[i] = i;
     y[i] = a * i*i*i + b * i*i + c * i + d;
   }
-  
   return {x:x, y:y}
 }
 
