@@ -15,12 +15,7 @@ function init() {
   // We generated some data according to a formula that's up to cubic, so we want
   // to learn the coefficients for
   // y = a * x ^ 3 + b * x^2 + c * x + d
-  trainingData = generateData(10, {a: 0, b:3, c:10, d:4});
-  
-  
-  const otherData = generateData2(10, {a: 0, b:3, c:10, d:4});
-  
-  debugger
+  trainingData = generateData(10, {a: 1, b:3, c:10, d:4});
   
   // See what our predictions would look like with random coefficients
   const tempCoeff = {
@@ -31,7 +26,6 @@ function init() {
   };
   
   predictionData = generateData(10, tempCoeff);
-  
   plot();
 }
 
@@ -87,7 +81,22 @@ async function doALearning() {
   const learningRate = 0.5;
   const optimizer = tf.train.sgd(learningRate); 
   
-  await train(trainingData.x, trainingData.y, numIterations);
+  await train(tf.tensor1d(trainingData.x), tf.tensor1d(trainingData.y), numIterations);
+  console.log('done');
+  
+  // See what our predictions look like now!
+  const tempCoeff = {
+    a: a.dataSync()[0],
+    b: b.dataSync()[0],
+    c: c.dataSync()[0],
+    d: d.dataSync()[0],
+  };
+  
+  console.log(tempCoeff);
+  
+  predictionData = generateData(10, tempCoeff);
+  //plot();
+  
   
   // This trains the model.
   async function train(xs, ys, numIterations) {
@@ -103,8 +112,8 @@ async function doALearning() {
       // loss.
       optimizer.minimize(() => {
         // Feed the examples into the model
-        console.log('calling predict', xs);
         const pred = predict(xs);
+        console.log(xs.get(), pred.get());
         return loss(pred, ys);
       });
 
@@ -118,7 +127,6 @@ async function doALearning() {
   function predict(x) {
     // y = a * x ^ 3 + b * x ^ 2 + c * x + d
     return tf.tidy(() => {
-      debugger
       return a.mul(x.pow(tf.scalar(3, 'int32')))
         .add(b.mul(x.square()))
         .add(c.mul(x))
@@ -130,43 +138,10 @@ async function doALearning() {
   function loss(prediction, labels) {
     // Having a good error function is key for training a machine learning model
     const error = prediction.sub(labels).square().mean();
+    console.log(error);
     return error;
   }
   
-}
-
-
-
-function generateData2(numPoints, coeff, sigma = 0.04) {
-  return tf.tidy(() => {
-    const [a, b, c, d] = [
-      tf.scalar(coeff.a), tf.scalar(coeff.b), tf.scalar(coeff.c),
-      tf.scalar(coeff.d)
-    ];
-
-    const xs = tf.randomUniform([numPoints], -1, 1);
-
-    // Generate polynomial data
-    const three = tf.scalar(3, 'int32');
-    const ys = a.mul(xs.pow(three))
-      .add(b.mul(xs.square()))
-      .add(c.mul(xs))
-      .add(d)
-      // Add random noise to the generated data
-      // to make the problem a bit more interesting
-      .add(tf.randomNormal([numPoints], 0, sigma));
-
-    // Normalize the y values to the range 0 to 1.
-    const ymin = ys.min();
-    const ymax = ys.max();
-    const yrange = ymax.sub(ymin);
-    const ysNormalized = ys.sub(ymin).div(yrange);
-
-    return {
-      xs, 
-      ys: ysNormalized
-    };
-  })
 }
 
 
