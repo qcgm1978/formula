@@ -4,6 +4,35 @@ let plotData = {training: {x:[], y:[]}, prediction: {x:[], y:[]}};
 
 init();
 
+
+function init() {
+  // We generated some data according to a formula that's up to cubic, so we want
+  // to learn the coefficients for
+  // y = a * x ^ 3 + b * x^2 + c * x + d
+  
+  const training = generateData(10);
+  plotData.training = training;
+  
+  
+  
+  
+  // Step 1. Set up the variables we're trying to learn.
+  const a = tf.variable(tf.scalar(Math.random()));
+  const b = tf.variable(tf.scalar(Math.random()));
+  const c = tf.variable(tf.scalar(Math.random()));
+  const d = tf.variable(tf.scalar(Math.random()));
+  
+  const tempCoeff = {
+    a: a.dataSync()[0],
+    b: b.dataSync()[0],
+    c: c.dataSync()[0],
+    d: d.dataSync()[0],
+  };
+  
+  
+  doALearning();
+}
+
 function plot() {
   const trace1 = {
     x: plotData.training.x,
@@ -23,14 +52,6 @@ function plot() {
   Plotly.newPlot('graph', [trace1, trace2], {});
 }  
   
-function init() {
-  // Training data
-  const training = generateData(10);
-  plotData.training = training;
-  
-  doALearning();
-  
-}
 
 function generateData(points) {
   // True coefficients
@@ -50,19 +71,15 @@ function generateData(points) {
   return {x:x, y:y}
 }
 
+// Based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
 function doALearning() {
   
-  // Based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
   
-  // We generated some data according to a formula that's up to cubic, so we want
-  // to learn the coefficients for
-  // y = a * x ^ 3 + b * x^2 + c * x + d
+  debugger
+  // See what the predictions look like with random coefficients
   
-  // Step 1. Set up the variables we're trying to learn.
-  const a = tf.variable(tf.scalar(Math.random()));
-  const b = tf.variable(tf.scalar(Math.random()));
-  const c = tf.variable(tf.scalar(Math.random()));
-  const d = tf.variable(tf.scalar(Math.random()));
+  const predictionsBefore = predict(trainingData.xs);
+  
   
   // Step 2. Create an optimizer, we will use this later. You can play
   // with some of these values to see how the model perfoms.
