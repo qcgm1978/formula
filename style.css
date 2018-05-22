@@ -18,8 +18,12 @@ h1, h2 {
   color: #29B6F6;
 }
 
-ul {
+ul, ol {
   padding-left: 40px;
+}
+
+li {
+  margin-bottom: 10px
 }
 
 code {

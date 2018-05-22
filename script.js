@@ -16,8 +16,6 @@ let predictionData = {x:[], y:[]};
 let learningData;
 const NUM_POINTS = 100;
 
-
-
 // Set up the variables we're trying to learn.
 const a = tf.variable(tf.scalar(Math.random()));
 const b = tf.variable(tf.scalar(Math.random()));
@@ -127,7 +125,6 @@ async function doALearning() {
   const optimizer = tf.train.sgd(learningRate); 
   
   await train(tf.tensor1d(trainingData.x), tf.tensor1d(trainingData.y), numIterations);
-  console.log('done');
   
   // See what our predictions look like now!
   const tempCoeff = {

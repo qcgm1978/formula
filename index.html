@@ -16,7 +16,7 @@
     
     <p>This is the basic <a href="https://js.tensorflow.org/tutorials/fit-curve.html">fit a curve to synthetic data</a>
       example from <a href="https://js.tensorflow.org/">TensorFlow</a>, but with different words, slightly different code
-      and prettier graphs.</p>
+      and prettier graphs. You can <a href="#demo">skip ahead to the demo</a> if you don't care about how it works.</p>
     
     <h2>The problem</h2>
     <p>The premise of every <b>machine learning</b> problem is:
@@ -37,16 +37,27 @@
     
     <h2>The solution</h2>
     <p>
-      Most machine learning algorithms follow this pattern:
-      <ul>
-        <li>We use that data we were given </li>
-        <li>By looking at this data we were given, we have to figure out how it was generated, so that we can correctly predict
-          a future data point. For example, if we're given a photo, we can say whether it's a golden retriever, or if we
-          are given a sound, we can tell if it was made by a bird.</li>
-      </ul>
+      Most machine learning algorithms follow this pattern.
+      <ol>
+        <li>We have to figure out the <b>"features"</b> of the secret formula that generated the data we were given, so that we 
+        can learn them. For our example, those features are the coefficients in the polynomial. For something more 
+        complex like the "is this dog a golden retriever" problem, we'd have to look at pixels and colours and formations. </li>
+        <li>Once we figure out these features (in our case, those <code>a,b,c,d</code> coefficients), we initialize them to some 
+          random values. We could now use them to make 
+        predictions, but they would be teeeeeerrible because they're just random.</li>
+        <li>(I'm just going to use our actual example from now on and 
+        not dogs)</li>
+        <li>We start looking at every piece of <code>(x,y)</code> data point we were given. We take the <code>x</code> and based on
+          these default coefficients we have created, we predict what the <code>y</code> would be. WE then look at the correct 
+          <code>y</code> from the data point, calculate our error, and then adjust our coefficients so that our value would be closer
+          to the actual one. This part is the most important one and TensorFlow does this for us</li>
+        <li>We keep doing this for every data point we have, and repeat the entire process a bunch of iterations, and at the 
+        end we've pretty much learnt the coefficients!</li>
+    <ol>
+         
 
     </p>
-    <h2>The fun demo</h2>
+        <h2><a href="#demo">The fun demo</a></h2>
   
     <div id="graph"></div>
     
