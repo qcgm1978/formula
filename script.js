@@ -84,7 +84,7 @@ function plot() {
 				orientation: "v"
 	  },
   };
-  Plotly.newPlot('graph', [trace1, trace2, trace3], layout, {displayModeBar: false});
+  Plotly.newPlot('graph', [trace1, trace2, trace3], layout, {scrollZoom:false, displayModeBar: false});
 }  
 
 function generateData(points, {a, b, c, d}) {

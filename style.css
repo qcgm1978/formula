@@ -7,6 +7,19 @@ body {
   line-height: 1.5;
 }
 
+@media (max-width: 460px) {
+  body {
+    margin-left: 10px;
+  }
+  .glitchButton .glitchButtonElement {
+    margin: 0 !important;
+    padding-right: 14px !important;
+  }
+  .glitchButton img {
+    width:20px;
+  }
+}
+
 a:link, a:visited {
   text-decoration: none;
   color: black;
@@ -14,8 +27,7 @@ a:link, a:visited {
 }
 
 h1, h2 {
-  font-family: 'IBM Plex Serif', serif;
-  font-style: italic;
+  font-family: 'IBM Plex Mono', serif;
   color: #29B6F6;
 }
 
