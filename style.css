@@ -1,0 +1,39 @@
+body {
+  font-family:"Lato", Helvetica, Arial, sans-serif;
+  max-width: 600px;
+  margin: 20px 50px;
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  line-height: 1.5;
+}
+
+h1 {
+  font-style: italic;
+  color: #29B6F6;
+}
+
+input {
+  font: inherit;
+  color: #333;
+  box-sizing: border-box;
+  letter-spacing: 1px;
+  border: 0;
+  padding: 7px 0;
+  border-bottom: 2px solid #F06292;
+}
+button {
+  background: #F06292;
+  color: white;
+  font-size: 1em;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 8px 18px;
+  margin: 36px 0;
+  border-radius: 4px;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+}

@@ -9,46 +9,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.0"> </script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="/script.js" defer></script>
-    
-    <style>
-      body {
-        font-family:"Lato", Helvetica, Arial, sans-serif;
-        text-align: center;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      input {
-        font: inherit;
-        color: #333;
-        box-sizing: border-box;
-        letter-spacing: 1px;
-        border: 0;
-        padding: 7px 0;
-        border-bottom: 2px solid #F06292;
-      }
-      button {
-        background: #F06292;
-        color: white;
-        font-size: 1em;
-        text-transform: uppercase;
-        font-weight: bold;
-        letter-spacing: 1px;
-        padding: 8px 18px;
-        margin: 36px 0;
-        border-radius: 4px;
-        box-shadow: none;
-        border: none;
-        cursor: pointer;
-      }
-      h1 {
-        font-style: italic;
-        color: #29B6F6;
-      }
-    </style>
+    <link rel="stylesheet" href="/style.css" type="text/css">
   </head>  
   <body>
     <header><h1>hello tensor flow</h1></header>
     
+    <p>This is the basic <a href="https://js.tensorflow.org/tutorials/fit-curve.html">fit a curve to synthetic data</a>
+      example from <a href="https://js.tensorflow.org/">TensorFlow</a>, but with different words, slightly different code
+      and prettier graphs</p>
+    
+    <p>The premise of the example (and tbh fundamentally all machine learning problems is:
+- Someone gives us some data that was generated according to a cubic formula (i.e. something of
+the form y = a * x ^ 3 + b * x^2 + c * x + d, for a bunch of xs), but doesn't
+tell us the values of these a,b,c,d coefficients
+- Just by looking at these (x,y) points we were given, we'd like to figure out the coefficients
+they were generated from.
+      
+    </p>
     <body>
       <div id="graph"></div>
     </body>

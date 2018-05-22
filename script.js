@@ -1,3 +1,14 @@
+/*
+Here's the TL; DR of this code example:
+- Someone gives us some data that was generated according to a cubic formula (i.e. something of
+the form y = a * x ^ 3 + b * x^2 + c * x + d, for a bunch of xs), but doesn't
+tell us the values of these a,b,c,d coefficients
+- Just by looking at these (x,y) points we were given, we'd like to figure out the coefficients
+they were generated from.
+
+And we do this! 
+*/
+
 // Sup globals. Fight me.
 let model;
 let trainingData = {x:[], y:[]};
@@ -5,15 +16,9 @@ let predictionData = {x:[], y:[]};
 let learningData;
 const NUM_POINTS = 100;
 
-/*
-Here's the TL; DR of this code example:
-- Someone gives us some data that was generated according to a cubic formula (i.e. something of
-the form y = a * x ^ 3 + b * x^2 + c * x + d, for a bunch of xs), but doesn't
-tell us the values of these a,b,c,d coefficients
-- Just by looking at these (x,y) points we were give
-*/
 
-// Step 1. Set up the variables we're trying to learn.
+
+// Set up the variables we're trying to learn.
 const a = tf.variable(tf.scalar(Math.random()));
 const b = tf.variable(tf.scalar(Math.random()));
 const c = tf.variable(tf.scalar(Math.random()));
