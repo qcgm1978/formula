@@ -1,5 +1,5 @@
 body {
-  font-family:"Lato", Helvetica, Arial, sans-serif;
+  font-family: "Lato", Helvetica, Arial, sans-serif;
   max-width: 700px;
   margin-top: 60px;
   margin-left: 40px;
@@ -13,24 +13,24 @@ a:link, a:visited {
   border-bottom: 2px solid #29B6F6;
 }
 
-h1 {
+h1, h2 {
   font-style: italic;
   color: #29B6F6;
 }
 
 ul {
-  padding-left: 20px;
+  padding-left: 40px;
 }
 
-li {
-  list-style-type: none;
+code {
+  padding: 3px 5px;
+  margin: 0 2px;
+  white-space: nowrap;
+  background-color: #f8f8f8;
+  color: #E91E63;
+  border-radius: 3px;
+  font-size: 16px;
 }
-
-li:before {
-  content: "👉";
-  margin-right: 10px;
-}
-
 input {
   font: inherit;
   color: #333;

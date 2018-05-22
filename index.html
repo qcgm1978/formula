@@ -18,20 +18,37 @@
       example from <a href="https://js.tensorflow.org/">TensorFlow</a>, but with different words, slightly different code
       and prettier graphs.</p>
     
-    <p>The premise of this example (and tbh fundamentally all machine learning problems) is:
+    <h2>The problem</h2>
+    <p>The premise of every <b>machine learning</b> problem is:
       <ul>
-        <li>Someone gives us some data that was generated according to a <b>secret</b> formula. It could be a bunch of points but it could 
-          also be, for example images (the secret formula could be "all of these dogs are golden retrievers"). In this example, 
-          someone gave us a bunch of points according to a cubic formula (i.e. something of
-the form <code>y = a * x ^ 3 + b * x^2 + c * x + d</code>), but hasn't told us the values of these 
-          <code>a,b,c,d</code> coefficients. We just get the points.</li>
-        <li>Just by looking at these (x,y) points we were given, we'd like to figure out the coefficients
-they were generated from.</li>
+        <li>Someone gives us some data that was generated according to a <b>secret</b> formula. This data could be a bunch 
+          of points (that are generated based on some math equation), but could also be fun, like images (the secret 
+          formula could be "all of these dogs are golden retrievers") or sounds ("all of these sounds are made by a bird")</li>
+        <li>By looking at this data we were given, we have to figure out how it was generated, so that we can correctly predict
+          a future data point. For example, if we're given a photo, we can say whether it's a golden retriever, or if we
+          are given a sound, we can tell if it was made by a bird.</li>
       </ul>
     </p>
-    <body>
-      <div id="graph"></div>
-    </body>
+  
+    <p>This specific example follows that pattern: we are given a bunch of data points according to a cubic polynomial (
+      i.e. generated from <code>y = a * x ^ 3 + b * x^2 + c * x + d</code>), but hasn't told us the values of these <code>a,b,c,d</code> coefficients.
+      Our goal is to learn these coefficients, so that if we're given a new <code>x</code>, we can say what the <code>y</code> should be.
+    </p>
+    
+    <h2>The solution</h2>
+    <p>
+      Most machine learning algorithms follow this pattern:
+      <ul>
+        <li>We use that data we were given </li>
+        <li>By looking at this data we were given, we have to figure out how it was generated, so that we can correctly predict
+          a future data point. For example, if we're given a photo, we can say whether it's a golden retriever, or if we
+          are given a sound, we can tell if it was made by a bird.</li>
+      </ul>
+
+    </p>
+    <h2>The fun demo</h2>
+  
+    <div id="graph"></div>
     
     <button onclick="doALearning()">Learn!</button>
     <br>
