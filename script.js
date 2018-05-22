@@ -141,7 +141,7 @@ function generateData(points, {a, b, c, d}) {
  * Learn the coefficients.
  * Very much based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
  */
-function doALearning() {
+async function doALearning() {
   // Create an optimizer. This is the thing that does the learning.
   // 👉 you can play with these two numbers if you want to change the 
   // rate at which the algorithm is learning
@@ -164,7 +164,7 @@ function doALearning() {
   const optimizer = tf.train.sgd(learningRate); 
   
   // Use the training data, and do numIteration passes over it. 
-  await train(tf.tensor1d(trainingData.x), tf.tensor1d(trainingData.y), numIterations);
+  await train(tf.tensor1d(Data.training.x), tf.tensor1d(Data.training.y), numIterations);
   
   // Once that is done, this has updated our coefficients! 
   // Here you could see what our predictions look like now, and use them!
@@ -175,7 +175,7 @@ function doALearning() {
   //   c: c.dataSync()[0],
   //   d: d.dataSync()[0],
   // };
-  // prediction = generateData(NUM_POINTS, coeff);
+  // Data.prediction = generateData(NUM_POINTS, coeff);
   // plot();
   
   /*
@@ -183,30 +183,24 @@ function doALearning() {
    */
   async function train(xs, ys, numIterations) {
     for (let iter = 0; iter < numIterations; iter++) {
-      const tempCoeff = {
+      // Plot where we are at this step.
+      const coeff = {
         a: a.dataSync()[0],
         b: b.dataSync()[0],
         c: c.dataSync()[0],
         d: d.dataSync()[0],
       };
-      learningData = generateData(NUM_POINTS, tempCoeff);
+      Data.learning = generateData(NUM_POINTS, coeff);
       plot();
   
-      
-      // optimizer.minimize is where the training happens.
-
-
-      // This optimizer does the 'backward' step of our training process
-      // updating variables defined previously in order to minimize the
-      // loss.
-      // This is where the step happens, and when the training takes place.
-      // 
+      // Learn! This is where the step happens, and when the training takes place.
       optimizer.minimize(() => {
         // Using our estimated coeff, predict all the ys for all the xs 
         const pred = predict(xs);
         
         // Need to return the loss i.e how bad is our prediction from the 
-        // correct answer.
+        // correct answer. The optimizer will then adjust the coefficients
+        // to minimize this loss.
         return loss(pred, ys);
       });
 
@@ -215,10 +209,13 @@ function doALearning() {
     }
   }
   
-  // Training process functions.
-  // This predicts a value
+  /*
+   * Predicts all the y values for all the x values.
+   */
   function predict(x) {
+    // Calculate a y according to the formula
     // y = a * x ^ 3 + b * x ^ 2 + c * x + d
+    // where a, b, c, d are the coefficients we have currently calculated.
     return tf.tidy(() => {
       return a.mul(x.pow(tf.scalar(3, 'int32')))
         .add(b.mul(x.square()))
@@ -227,9 +224,15 @@ function doALearning() {
     });
   }
   
-  // This tells you how good the prediction is based on what you expected.
+  /*
+   * Loss function: how good the prediction is based on what you expected.
+   */
   function loss(prediction, labels) {
-    // Having a good error function is key for training a machine learning model
+    // This is the mean squared error between the prediction and the correct answer
+    // If you had n data points (NUM_POINTS = n) then it would be:
+    // error = 1/n * ( (prediction_1 - answer_1)^2 + ... + (prediction_n - answer_n)^2  )
+    // see https://en.wikipedia.org/wiki/Mean_squared_error
+    // This is also why TensorFlow is great! Doing this by hand sucks!
     const error = prediction.sub(labels).square().mean();
     return error;
   }
