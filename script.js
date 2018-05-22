@@ -75,7 +75,7 @@ function plot() {
     x: Data.prediction.x,
     y: Data.prediction.y,
     mode: 'lines+markers',
-    name: 'Prediction',
+    name: 'Initial Prediction',
     marker: { size: 12, color: '#F06292' }
   };
   
