@@ -99,13 +99,19 @@
           <li>We start looking at every piece <code>(x,y)</code> of training data we were given. We take the <code>x</code> value, and based on
             these coefficients we have estimated, we predict what the <code>y</code> value would be. We then look at the correct 
             <code>y</code> value from the original training data, calculate the differene between the two, and then adjust our coefficients 
-            so that our value is be closer to the actual one. This part is the most complicated one, and TensorFlow does this for us!</li>
-          <li>We keep doing this until we use up all the data, and then repeat the entire process a bunch of iterations; at the 
-          end if we had enough data, we've pretty much learnt the coefficients!</li>
+            so that our predicted value gets closer to the correct one. </li>
+          <li>(this, with more math sprinkled in is called "stochastic gradient descent". "Stochastic" means probabilistic, and 
+          "gradient descent" should make you think of walking down a hill, towards a sink hole -- the higher the hill, the bigger the 
+            prediction error, which is why you want to descend towards the error-free hole.)</li>
+          <li>This part of code is actually pretty messy (because matrices and derivatives), and TensorFlow does this for us!</li>
+          <li>We keep doing this until we use up all the data, and then repeat the entire process so that we iterate over the same data over 
+            and over again until at the end we've pretty much learnt the coefficients!</li>
         </ol>
       </p>
 
-    <p>I commented basically every line of the code with what the algorithm or TensorFlow is doing (especially when
+    <h2>The code</h2>
+    <p>You can look at the code for the demo <a href="https://glitch.com/edit/#!/hello-tensorflow?path=script.js:95:10">here on Glitch</a>. I tried to comment
+      most lines of the code with either what the algorithm or TensorFlow are doing (especially when
       TensorFlow is actually doing a looooot of heavy lifting behind the scenes). I hope it helps!</p>
 
     <script src="https://button.glitch.me/button.js"></script>
