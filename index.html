@@ -15,47 +15,32 @@
   <body>
     <header><h1>hello tensor flow <div class="glitchButton"></div></h1></header>
     
-    <p>This is the basic <a href="https://js.tensorflow.org/tutorials/fit-curve.html">fit a curve to synthetic data</a>
-      example from <a href="https://js.tensorflow.org/">TensorFlow</a>, but with different words, slightly different code
-      and prettier graphs. You can <a href="#demo">skip ahead to the demo</a> if you don't care about how it works.</p>
+    <p>
+      <b>Machine Learning (ML) </b> is the dope new thing that everyone's talking about, because it's really good 
+      at learning from data so that it can predict similar things in the future. Doing ML by hand is pretty annoying
+      since it usually involves matrix math which is zero fun in JavaScript (or if you ask me: anywhere ). 
+      Thankfully, <a href="https://js.tensorflow.org/">TensorFlow.js</a> is here to help! It's 
+      an open source library that has a lot of built-in Machine Learning-y things like models and algorithms!
+    </p>
     
-    <h2>The problem</h2>
-    <p>The premise of every <b>machine learning</b> problem is:
+    <h2>Is your problem a Machine Learning problem?</h2>
+    <p>Machine learning is good at classifying and labelling data. The premise of every machine learning problem is:
       <ul>
         <li>Someone gives us some data that was generated according to a <b>secret</b> formula. This data could be a bunch 
           of points (that are generated based on some math equation), but could also be fun, like images (the secret 
-          formula could be "all of these dogs are golden retrievers") or sounds ("all of these sounds are made by a bird")</li>
-        <li>By looking at this data we were given, we have to figure out how it was generated, so that we can correctly predict
-          a future data point. For example, if we're given a photo, we can say whether it's a golden retriever, or if we
-          are given a sound, we can tell if it was made by a bird.</li>
+          formula could be "all of these dogs are golden retrievers") or sounds ("all of these sounds are made by a bird") or
+        bus schedules.</li>
+        <li>By looking at this data we were given, we approximate the secret formula so that we can correctly predict
+          a future data point. For example, if we're given a photo, we will eventually be able to say whether it's a golden retriever or not.</li>
       </ul>
     </p>
   
-    <p>This specific example follows that pattern: we are given a bunch of data points according to a cubic polynomial (
+    <p>This is the <a href="https://js.tensorflow.org/tutorials/fit-curve.html">"fit a curve to a bunch of data"</a>
+      example from the TensorFlow site: we are given a bunch of data points according to a cubic polynomial (
       i.e. generated from <code>y = a * x ^ 3 + b * x^2 + c * x + d</code>), but hasn't told us the values of these <code>a,b,c,d</code> coefficients.
       Our goal is to learn these coefficients, so that if we're given a new <code>x</code>, we can say what the <code>y</code> should be.
     </p>
     
-    <h2>The solution</h2>
-    <p>
-      Most machine learning algorithms follow this pattern.
-      <ol>
-        <li>We have to figure out the <b>"features"</b> of the secret formula that generated the data we were given, so that we 
-        can learn them. For our example, those features are the coefficients in the polynomial. For something more 
-        complex like the "is this dog a golden retriever" problem, we'd have to look at pixels and colours and formations. </li>
-        <li>Once we figure out these features (in our case, those <code>a,b,c,d</code> coefficients), we initialize them to some 
-          random values. We could now use them to make 
-        predictions, but they would be teeeeeerrible because they're just random.</li>
-        <li>(I'm just going to use our actual example from now on and 
-        not dogs)</li>
-        <li>We start looking at every piece of <code>(x,y)</code> data point we were given. We take the <code>x</code> and based on
-          these default coefficients we have created, we predict what the <code>y</code> would be. WE then look at the correct 
-          <code>y</code> from the data point, calculate our error, and then adjust our coefficients so that our value would be closer
-          to the actual one. This part is the most important one and TensorFlow does this for us</li>
-        <li>We keep doing this for every data point we have, and repeat the entire process a bunch of iterations, and at the 
-        end we've pretty much learnt the coefficients!</li>
-      </ol>
-    </p>
          
     <h2 id="demo">The fun demo</h2>
     <p>
@@ -77,6 +62,27 @@
 
     <div id="graph"></div>
     
+    <h2>How it works</h2>
+      <p>
+        Most machine learning algorithms follow this pattern:
+        <ol>
+          <li>We have to figure out the <b>"features"</b> of the secret formula that generated the data we were given, so that we 
+          can learn them. For our example, those features are the coefficients in the polynomial. For something more 
+          complex like the "is this dog a golden retriever" problem, we'd have to look at pixels and colours and formations. </li>
+          <li>Once we figure out these features (in our case, those <code>a,b,c,d</code> coefficients), we initialize them to some 
+            random values. We could now use them to make 
+          predictions, but they would be teeeeeerrible because they're just random.</li>
+          <li>(I'm just going to use our actual example from now on and 
+          not dogs)</li>
+          <li>We start looking at every piece of <code>(x,y)</code> data point we were given. We take the <code>x</code> and based on
+            these default coefficients we have created, we predict what the <code>y</code> would be. WE then look at the correct 
+            <code>y</code> from the data point, calculate our error, and then adjust our coefficients so that our value would be closer
+            to the actual one. This part is the most important one and TensorFlow does this for us</li>
+          <li>We keep doing this for every data point we have, and repeat the entire process a bunch of iterations, and at the 
+          end we've pretty much learnt the coefficients!</li>
+        </ol>
+      </p>
+
     <script src="https://button.glitch.me/button.js"></script>
 
     <div class="footer">
