@@ -8,7 +8,8 @@ body {
 
 @media (max-width: 460px) {
   body {
-    margin-left: 10px;
+    margin-left: 14px;
+    margin-right: 14px;
   }
   .glitchButton .glitchButtonElement {
     margin: 0 !important;
@@ -51,6 +52,7 @@ code {
 .formula code {
   background: transparent; 
   color: black;
+  white-space: pre-line;
 }
 
 .input-container {

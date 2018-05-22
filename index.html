@@ -37,7 +37,7 @@
     </p>
     
          
-    <h2 id="demo">A fun demo!!</h2>
+    <h2 id="demo">A fun demo!</h2>
     <p>
       If you want to get started, predicting numbers tends to be easier than predicting images, so in this example
       we're trying to fit a curve to a bunch of data (this is the same example from the 
@@ -87,17 +87,19 @@
         Most machine learning algorithms follow this pattern:
         <ol>
           <li>We have to figure out the <b>"features"</b> of the secret formula that generated the data we were given, so that we 
-          can learn them. In this example, those features are the coefficients in the polynomial. For something more 
-          complex like the "is this dog a blueberry muffin" problem, we'd have to look at pixels and colours and formations. </li>
+          can learn them. In my opinion, this is like 80% of the complexity of solving an ML problem. In this example, we were told the 
+            shape of the secret formula (it's a cubic!), so the features we have to learn are the coefficients in the polynomial. For something more 
+          complex like the "is this dog a blueberry muffin" problem, we'd have to look at pixels and colours and formations and what
+          makes a dog a dog and not a muffin.</li>
           <li>Once we figure out these features (in our case, those <code>a,b,c,d</code> coefficients), we initialize them to some 
             random values. We could now use them to make 
           predictions, but they would be teeeeeerrible because they're just random.</li>
           <li>(I'm just going to use our actual example from now on and 
           not dogs)</li>
-          <li>We start looking at every piece of <code>(x,y)</code> data point we were given. We take the <code>x</code> and based on
-            these default coefficients we have created, we predict what the <code>y</code> would be. We then look at the correct 
-            <code>y</code> value from the data set we were given, calculate our error, and then adjust our coefficients so that our value would be closer
-            to the actual one. This part is the most complicated one, and TensorFlow does this for us!</li>
+          <li>We start looking at every piece <code>(x,y)</code> of training data we were given. We take the <code>x</code> value, and based on
+            these coefficients we have estimated, we predict what the <code>y</code> value would be. We then look at the correct 
+            <code>y</code> value from the original training data, calculate the differene between the two, and then adjust our coefficients 
+            so that our value is be closer to the actual one. This part is the most complicated one, and TensorFlow does this for us!</li>
           <li>We keep doing this until we use up all the data, and then repeat the entire process a bunch of iterations; at the 
           end if we had enough data, we've pretty much learnt the coefficients!</li>
         </ol>

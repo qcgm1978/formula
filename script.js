@@ -92,11 +92,11 @@ function plot() {
   
   const layout = {
     margin: {
-      l: 30, r: 0, b: 0, t: 0, 
+      l: 20, r: 0, b: 0, t: 0, 
       pad:0
     },
     legend: {
-				xanchor:"center",
+				xanchor:"left",
 				yanchor:"top",
 				y: 1,  //tbh i don't know what these numbers mean?!
         x: 0,
