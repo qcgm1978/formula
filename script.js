@@ -3,6 +3,15 @@ let model;
 let trainingData = {x:[], y:[]};
 let predictionData = {x:[], y:[]};
 let learningData;
+const NUM_POINTS = 100;
+
+/*
+Here's the TL; DR of this code example:
+- Someone gives us some data that was generated according to a cubic formula (i.e. something of
+the form y = a * x ^ 3 + b * x^2 + c * x + d, for a bunch of xs), but doesn't
+tell us the values of these a,b,c,d coefficients
+- Just by looking at these (x,y) points we were give
+*/
 
 // Step 1. Set up the variables we're trying to learn.
 const a = tf.variable(tf.scalar(Math.random()));
@@ -16,7 +25,7 @@ function init() {
   // We generated some data according to a formula that's up to cubic, so we want
   // to learn the coefficients for
   // y = a * x ^ 3 + b * x^2 + c * x + d
-  trainingData = generateData(10, {a: -0.8, b:-0.2, c:0.9, d:0.5});
+  trainingData = generateData(NUM_POINTS, {a: -0.8, b:-0.2, c:0.9, d:0.5});
   
   // See what our predictions would look like with random coefficients
   const tempCoeff = {
@@ -26,7 +35,7 @@ function init() {
     d: d.dataSync()[0],
   };
   
-  predictionData = generateData(10, tempCoeff);
+  predictionData = generateData(NUM_POINTS, tempCoeff);
   plot();
 }
 
@@ -47,8 +56,17 @@ function plot() {
     marker: { size: 12, color: '#F06292' }
   };
   
-  let trace3;
-  if (learningData) 
+  let trace3 = {};
+  if (learningData) {
+    trace3 = {
+      x: learningData.x,
+      y: learningData.y,
+      mode: 'markers',
+      name: 'Learning',
+      marker: { size: 12, color: '#00E676' }
+    };
+  }
+  
   const layout = {
     margin: {
       l: 30, r: 0, b: 0, t: 0, 
@@ -62,9 +80,9 @@ function plot() {
 				orientation: "v"
 	  },
   };
-  Plotly.newPlot('graph', [trace1, trace2], layout, {displayModeBar: false});
+  Plotly.newPlot('graph', [trace1, trace2, trace3], layout, {displayModeBar: false});
 }  
-  
+
 function generateData(points, {a, b, c, d}) {
   let x = [];
   let y = [];
@@ -114,24 +132,21 @@ async function doALearning() {
     d: d.dataSync()[0],
   };
   
-  console.log(tempCoeff);
-  
-  predictionData = generateData(10, tempCoeff);
+  predictionData = generateData(NUM_POINTS, tempCoeff);
   plot();
-
   
   // This trains the model.
   async function train(xs, ys, numIterations) {
     for (let iter = 0; iter < numIterations; iter++) {
       const tempCoeff = {
-    a: a.dataSync()[0],
-    b: b.dataSync()[0],
-    c: c.dataSync()[0],
-    d: d.dataSync()[0],
-  };
+        a: a.dataSync()[0],
+        b: b.dataSync()[0],
+        c: c.dataSync()[0],
+        d: d.dataSync()[0],
+      };
+      learningData = generateData(NUM_POINTS, tempCoeff);
+      plot();
   
-  console.log(tempCoeff);
-      
       // optimizer.minimize is where the training happens.
 
       // The function it takes must return a numerical estimate (i.e. loss)
@@ -168,46 +183,11 @@ async function doALearning() {
   function loss(prediction, labels) {
     // Having a good error function is key for training a machine learning model
     const error = prediction.sub(labels).square().mean();
-    console.log(error);
     return error;
   }
-  
 }
 
 
-
-
- function generateData2(numPoints, coeff, sigma = 0.04) {
-  return tf.tidy(() => {
-    const [a, b, c, d] = [
-      tf.scalar(coeff.a), tf.scalar(coeff.b), tf.scalar(coeff.c),
-      tf.scalar(coeff.d)
-    ];
-
-    const xs = tf.randomUniform([numPoints], -1, 1);
-
-    // Generate polynomial data
-    const three = tf.scalar(3, 'int32');
-    const ys = a.mul(xs.pow(three))
-      .add(b.mul(xs.square()))
-      .add(c.mul(xs))
-      .add(d)
-      // Add random noise to the generated data
-      // to make the problem a bit more interesting
-      .add(tf.randomNormal([numPoints], 0, sigma));
-
-    // Normalize the y values to the range 0 to 1.
-    const ymin = ys.min();
-    const ymax = ys.max();
-    const yrange = ymax.sub(ymin);
-    const ysNormalized = ys.sub(ymin).div(yrange);
-
-    return {
-      xs, 
-      ys: ysNormalized
-    };
-  })
-}
 // function learn(xData, yData) {
 //   // Define a model for linear regression.
 //   model = tf.sequential();
