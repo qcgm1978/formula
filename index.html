@@ -10,6 +10,7 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="/script.js" defer></script>
     <link rel="stylesheet" href="/style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Serif:600i" rel="stylesheet">
   </head>  
   <body>
     <header><h1>hello tensor flow</h1></header>
@@ -63,18 +64,24 @@
       button, the <b>green</b> dots show how our coefficients are getting better. Check what happens if we
       are given fewer data points or fewer iterations!
     </p>
-    <button onclick="doALearning()">Learn!</button>
+    
     <div class="input-container">
       <label for="points">initial points</label>
-      <input id="points" placeholder="100" value="100" type="number">
+      <input id="points" placeholder="100" value="100" type="number" onchange="init()">
     </div>
     <div class="input-container">
       <label for="iterations">iterations</label>
       <input id="iterations" placeholder="75" value="75" type="number">
     </div>
-      <div id="graph"></div>
+    <button onclick="doALearning()">Learn!</button>
+
+    <div id="graph"></div>
     
     <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
     <script src="https://button.glitch.me/button.js"></script>
+
+    <div class="footer">
+      made by <a href="https://twitter.com/notwaldorf">monica</a>
+    </div>
   </body>
 </html>
