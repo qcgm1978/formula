@@ -53,19 +53,20 @@
           to the actual one. This part is the most important one and TensorFlow does this for us</li>
         <li>We keep doing this for every data point we have, and repeat the entire process a bunch of iterations, and at the 
         end we've pretty much learnt the coefficients!</li>
-    <ol>
-         
-
+      </ol>
     </p>
-        <h2><a href="#demo">The fun demo</a></h2>
-  
-    <div id="graph"></div>
-    
+         
+    <h2 id="demo">The fun demo</h2>
+    <p>
+      The <b>blue</b> dots are the training points we were given. The <b>red</b> dots would be our guesses,
+      based on our initial, default coefficients (hella incorrect!). Once you click the <code>train</code>
+      button, the <b>green</b> dots show how our coefficients are getting better. Check what happens if we
+      are given fewer data points or fewer iterations!
+    </p>
     <button onclick="doALearning()">Learn!</button>
-    <br>
-    
-    <input type="number" placeholder="Predict a value" id="input" onchange="predict()">
-    <button onclick="predict()">Predict</button>
+    <label>initial points</label>
+    <input id="iterations" placeholder="iterations" value="75" type="number">
+    <div id="graph"></div>
     
     <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
     <script src="https://button.glitch.me/button.js"></script>

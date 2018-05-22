@@ -14,7 +14,7 @@ let model;
 let trainingData = {x:[], y:[]};
 let predictionData = {x:[], y:[]};
 let learningData;
-const NUM_POINTS = 100;
+let NUM_POINTS = 100;
 
 // Set up the variables we're trying to learn.
 const a = tf.variable(tf.scalar(Math.random()));
@@ -25,6 +25,7 @@ const d = tf.variable(tf.scalar(Math.random()));
 init();
 
 function init() {
+  //NUM_POINTS = 
   // We generated some data according to a formula that's up to cubic, so we want
   // to learn the coefficients for
   // y = a * x ^ 3 + b * x^2 + c * x + d
@@ -188,34 +189,3 @@ async function doALearning() {
     return error;
   }
 }
-
-
-// function learn(xData, yData) {
-//   // Define a model for linear regression.
-//   model = tf.sequential();
-//   model.add(tf.layers.dense({units: 1, inputShape: [1]}));
-
-//   // Prepare the model for training: Specify the loss and the optimizer.
-//   model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
-
-//   // Generate some synthetic data for training.
-//   const xs = tf.tensor2d(xData, [xData.length, 1]);
-//   const ys = tf.tensor2d(yData, [yData.length, 1]);
-//   model.fit(xs, ys).then(plot);
-//   return model;
-// }
-
-// function predict(what) {
-//   if (!what) {
-//     what = document.getElementById('input').value;
-//   }
-  
-//   // Use the model to do inference on a data point the model hasn't seen before:
-//   const prediction = model.predict(tf.tensor2d([what], [1, 1]));
-//   console.log(prediction);
-  
-//   plotData.prediction.x.push(what);
-//   plotData.prediction.y.push(prediction.get());
-//   console.log(what, prediction.get());
-//   plot();
-// }
