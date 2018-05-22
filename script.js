@@ -237,8 +237,11 @@ async function doALearning() {
     // This is the mean squared error between the prediction and the correct answer
     // If you had n data points (NUM_POINTS = n) then it would be:
     // error = 1/n * ( (prediction_1 - answer_1)^2 + ... + (prediction_n - answer_n)^2  )
-    // see https://en.wikipedia.org/wiki/Mean_squared_error
-    // This is also why TensorFlow is great! Doing this by hand sucks!
+    // see https://en.wikipedia.org/wiki/Mean_squared_error.
+    // There are other error functions you could use, but if you're doing numeric things,
+    // MSE is one of the best and also the easiest.
+    
+    // Also, this is also why TensorFlow is great! Doing this by hand sucks!
     const error = prediction.sub(labels).square().mean();
     return error;
   }
