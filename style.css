@@ -55,7 +55,7 @@ code {
 .formula code {
   background: transparent; 
   color: black;
-  white-space: pre-line;
+  white-space: normal;
 }
 
 .input-container {
