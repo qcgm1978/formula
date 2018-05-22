@@ -18,6 +18,9 @@ body {
   .glitchButton img {
     width:20px;
   }
+  h1 {
+    font-size: 1.8em;
+  }
 }
 
 a:link, a:visited {
