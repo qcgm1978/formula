@@ -6,17 +6,24 @@ tell us the values of these a,b,c,d coefficients
 - Just by looking at these (x,y) points we were given, we'd like to figure out the coefficients
 they were generated from.
 
-And we do this! 
+And we do this here!
+
+Look out for comments that have 👉 in the code: it means that's code 
+you can play around with!
 */
 
-// Sup globals. Fight me.
-let model;
-let trainingData = {x:[], y:[]};
-let predictionData = {x:[], y:[]};
-let learningData;
-let NUM_POINTS = 100;
+// Sup globals. Fight me. Plots are hard.
+const Data = {
+  training: {x:[], y:[]},   // the initial data set we're given
+  prediction: {x:[], y:[]}, // what we're predicting based on the coefficients
+  learning: {x:[], y:[]}    // what we're predicting while learning.
+}
 
-// Set up the variables we're trying to learn.
+let NUM_POINTS;             // how many data points in the set.
+
+// These are the coefficients we're trying to learn. 
+// They're all TensorFlows scalars (fancy for "number") and
+// initialized to random numbers.
 const a = tf.variable(tf.scalar(Math.random()));
 const b = tf.variable(tf.scalar(Math.random()));
 const c = tf.variable(tf.scalar(Math.random()));
@@ -26,12 +33,13 @@ init();
 
 function init() {
   NUM_POINTS = parseInt(document.getElementById('points').value || 100);
-  // We generated some data according to a formula that's up to cubic, so we want
-  // to learn the coefficients for
-  // y = a * x ^ 3 + b * x^2 + c * x + d
-  trainingData = generateData(NUM_POINTS, {a: -0.8, b:-0.2, c:0.9, d:0.5});
   
-  // See what our predictions would look like with random coefficients
+  // Fake the training data. 
+  // 👉 you should play with these numbers if you want to generate a 
+  // different initial data set!
+  Data.training = generateData(NUM_POINTS, {a: -0.8, b:-0.2, c:0.9, d:0.5});
+  
+  // Firt, see what our predictions would look like with random coefficients
   const tempCoeff = {
     a: a.dataSync()[0],
     b: b.dataSync()[0],
@@ -39,33 +47,38 @@ function init() {
     d: d.dataSync()[0],
   };
   
-  predictionData = generateData(NUM_POINTS, tempCoeff);
+  Data.prediction = generateData(NUM_POINTS, tempCoeff);
   plot();
 }
 
+/***********************
+ * Plots a pretty graph with all the data we have!
+ * Uses plotly.js
+ ***********************/
+
 function plot() {
   const trace1 = {
-    x: trainingData.x,
-    y: trainingData.y,
+    x: Data.training.x,
+    y: Data.training.y,
     mode: 'lines+markers',
     name: 'Training',
     marker: { size: 12, color:'#29B6F6' }
   };
 
   const trace2 = {
-    x: predictionData.x,
-    y: predictionData.y,
-    mode: 'markers',
+    x: Data.prediction.x,
+    y: Data.prediction.y,
+    mode: 'lines+markers',
     name: 'Prediction',
     marker: { size: 12, color: '#F06292' }
   };
   
   let trace3 = {};
-  if (learningData) {
+  if (Data.learning) {
     trace3 = {
-      x: learningData.x,
-      y: learningData.y,
-      mode: 'markers',
+      x: Data.learning.x,
+      y: Data.learning.y,
+      mode: 'lines+markers',
       name: 'Learning',
       marker: { size: 12, color: '#00E676' }
     };
@@ -79,7 +92,7 @@ function plot() {
     legend: {
 				xanchor:"center",
 				yanchor:"top",
-				y:1,//number between or equal to -2 and 3,
+				y: 1,  //tbh i don't know what these numbers mean?!
         x: 0,
 				orientation: "v"
 	  },
@@ -87,6 +100,14 @@ function plot() {
   Plotly.newPlot('graph', [trace1, trace2, trace3], layout, {displayModeBar: false});
 }  
 
+/***********************
+ * Plots a pretty graph with all the data we have!
+ * Uses plotly.js
+ ***********************/
+/*
+ * Generates data according to the formula:
+ * y = a * x ^ 3 + b * x^2 + c * x + d
+ */
 function generateData(points, {a, b, c, d}) {
   let x = [];
   let y = [];
