@@ -1,17 +1,34 @@
 body {
   font-family:"Lato", Helvetica, Arial, sans-serif;
-  max-width: 600px;
-  margin: 20px 50px;
-  -webkit-font-smoothing: antialiased;
+  max-width: 700px;
+  margin-top: 60px;
+  margin-left: 40px;
+  -webkit-font-smoothing: antialiased;  
+  line-height: 1.5;
 }
 
-p {
-  line-height: 1.5;
+a:link, a:visited {
+  text-decoration: none;
+  color: black;
+  border-bottom: 2px solid #29B6F6;
 }
 
 h1 {
   font-style: italic;
   color: #29B6F6;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+li {
+  list-style-type: none;
+}
+
+li:before {
+  content: "👉";
+  margin-right: 10px;
 }
 
 input {

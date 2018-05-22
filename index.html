@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Hello!</title>
+    <title>Hello tensor flow</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,15 +16,18 @@
     
     <p>This is the basic <a href="https://js.tensorflow.org/tutorials/fit-curve.html">fit a curve to synthetic data</a>
       example from <a href="https://js.tensorflow.org/">TensorFlow</a>, but with different words, slightly different code
-      and prettier graphs</p>
+      and prettier graphs.</p>
     
-    <p>The premise of the example (and tbh fundamentally all machine learning problems is:
-- Someone gives us some data that was generated according to a cubic formula (i.e. something of
-the form y = a * x ^ 3 + b * x^2 + c * x + d, for a bunch of xs), but doesn't
-tell us the values of these a,b,c,d coefficients
-- Just by looking at these (x,y) points we were given, we'd like to figure out the coefficients
-they were generated from.
-      
+    <p>The premise of this example (and tbh fundamentally all machine learning problems) is:
+      <ul>
+        <li>Someone gives us some data that was generated according to a <b>secret</b> formula. It could be a bunch of points but it could 
+          also be, for example images (the secret formula could be "all of these dogs are golden retrievers"). In this example, 
+          someone gave us a bunch of points according to a cubic formula (i.e. something of
+the form <code>y = a * x ^ 3 + b * x^2 + c * x + d</code>), but hasn't told us the values of these 
+          <code>a,b,c,d</code> coefficients. We just get the points.</li>
+        <li>Just by looking at these (x,y) points we were given, we'd like to figure out the coefficients
+they were generated from.</li>
+      </ul>
     </p>
     <body>
       <div id="graph"></div>
