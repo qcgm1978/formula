@@ -2,6 +2,7 @@
 let model;
 let trainingData = {x:[], y:[]};
 let predictionData = {x:[], y:[]};
+let learningData;
 
 // Step 1. Set up the variables we're trying to learn.
 const a = tf.variable(tf.scalar(Math.random()));
@@ -46,6 +47,8 @@ function plot() {
     marker: { size: 12, color: '#F06292' }
   };
   
+  let trace3;
+  if (learningData) 
   const layout = {
     margin: {
       l: 30, r: 0, b: 0, t: 0, 
@@ -66,12 +69,16 @@ function generateData(points, {a, b, c, d}) {
   let x = [];
   let y = [];
   
-  // Normalize the x values to be between 0 and 1.
-  
+  // Normalize the x values to be between -1 and 1.
+  // This is super important! If you don't do this everything breaks
+  const xs = tf.randomUniform([points], -1, 1);
+  for (let i = 0; i < points; i++) {
+    x[i] = xs.get(i);
+  }
+  x = x.sort(function(a,b){return a - b})
   
   for (let i = 0; i < points; i++) {
-    const val = (i - 0) / points;
-    x[i] = val;
+    const val = x[i];
     y[i] = a * (val*val*val) + b * (val*val) + c * val + d;
   }
   
@@ -82,14 +89,10 @@ function generateData(points, {a, b, c, d}) {
   
   for (let i = 0; i < points; i++) {
     const val = y[i];
-    y[i] = normalize(y[i], 0, ymax, ymin);
+    y[i] = (y[i] - ymin) / yrange;
   }
   
   return {x:x, y:y}
-}
-
-function normalize(val, min, max) {
-  return (val - min) / (max - min); 
 }
   
 // Based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
@@ -114,8 +117,8 @@ async function doALearning() {
   console.log(tempCoeff);
   
   predictionData = generateData(10, tempCoeff);
-  //plot();
-  
+  plot();
+
   
   // This trains the model.
   async function train(xs, ys, numIterations) {
@@ -141,7 +144,6 @@ async function doALearning() {
       optimizer.minimize(() => {
         // Feed the examples into the model
         const pred = predict(xs);
-        debugger
         return loss(pred, ys);
       });
 
