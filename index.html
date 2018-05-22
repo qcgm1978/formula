@@ -64,9 +64,15 @@
       are given fewer data points or fewer iterations!
     </p>
     <button onclick="doALearning()">Learn!</button>
-    <label>initial points</label>
-    <input id="iterations" placeholder="iterations" value="75" type="number">
-    <div id="graph"></div>
+    <div class="input-container">
+      <label for="points">initial points</label>
+      <input id="points" placeholder="100" value="100" type="number">
+    </div>
+    <div class="input-container">
+      <label for="iterations">iterations</label>
+      <input id="iterations" placeholder="75" value="75" type="number">
+    </div>
+      <div id="graph"></div>
     
     <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
     <script src="https://button.glitch.me/button.js"></script>

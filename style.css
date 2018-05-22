@@ -35,14 +35,27 @@ code {
   border-radius: 3px;
   font-size: 16px;
 }
+
+.input-container {
+  display: inline-block;
+  margin: 0 20px;
+}
+
+label {
+  line-height: 22px;
+  color: black;
+  font-size: 14px;
+  display: block;
+}
+
 input {
   font: inherit;
   color: #333;
   box-sizing: border-box;
   letter-spacing: 1px;
   border: 0;
-  padding: 7px 0;
   border-bottom: 2px solid #F06292;
+  width: 80px;
 }
 button {
   background: #F06292;

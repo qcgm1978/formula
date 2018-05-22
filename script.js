@@ -25,7 +25,7 @@ const d = tf.variable(tf.scalar(Math.random()));
 init();
 
 function init() {
-  //NUM_POINTS = 
+  NUM_POINTS = parseInt(document.getElementById('points').value || 100);
   // We generated some data according to a formula that's up to cubic, so we want
   // to learn the coefficients for
   // y = a * x ^ 3 + b * x^2 + c * x + d
@@ -121,22 +121,19 @@ function generateData(points, {a, b, c, d}) {
 async function doALearning() {
   // Create an optimizer, we will use this later. You can play
   // with some of these values to see how the model perfoms.
-  const numIterations = 75;
+  const numIterations = parseInt(document.getElementById('iterations').value || 75);
   const learningRate = 0.5;
   const optimizer = tf.train.sgd(learningRate); 
   
   await train(tf.tensor1d(trainingData.x), tf.tensor1d(trainingData.y), numIterations);
   
-  // See what our predictions look like now!
+  // Here you could see what our predictions look like now, and use them!
   const tempCoeff = {
     a: a.dataSync()[0],
     b: b.dataSync()[0],
     c: c.dataSync()[0],
     d: d.dataSync()[0],
   };
-  
-  predictionData = generateData(NUM_POINTS, tempCoeff);
-  plot();
   
   // This trains the model.
   async function train(xs, ys, numIterations) {
