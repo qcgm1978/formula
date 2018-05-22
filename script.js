@@ -15,7 +15,7 @@ function init() {
   // We generated some data according to a formula that's up to cubic, so we want
   // to learn the coefficients for
   // y = a * x ^ 3 + b * x^2 + c * x + d
-  trainingData = generateData(10, {a: 0, b:3, c:10, d:4});
+  trainingData = generateData(10, {a: -0.8, b:-0.2, c:0.9, d:0.5});
   
   // See what our predictions would look like with random coefficients
   const tempCoeff = {
@@ -66,25 +66,32 @@ function generateData(points, {a, b, c, d}) {
   let x = [];
   let y = [];
   
+  // Normalize the x values to be between 0 and 1.
+  
+  
   for (let i = 0; i < points; i++) {
-    const val = i;
+    const val = (i - 0) / points;
     x[i] = val;
     y[i] = a * (val*val*val) + b * (val*val) + c * val + d;
   }
   
-  // Normalize the y values to the range 0 to 1.
+  // Normalize the y values to be between 0 and 1
   const ymin = Math.min(...y);
   const ymax = Math.max(...y);
   const yrange = ymax - ymin;
   
   for (let i = 0; i < points; i++) {
     const val = y[i];
-    y[i] = (y[i] - ymin) / yrange;
+    y[i] = normalize(y[i], 0, ymax, ymin);
   }
   
   return {x:x, y:y}
 }
 
+function normalize(val, min, max) {
+  return (val - min) / (max - min); 
+}
+  
 // Based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
 async function doALearning() {
   // Create an optimizer, we will use this later. You can play
@@ -112,8 +119,16 @@ async function doALearning() {
   
   // This trains the model.
   async function train(xs, ys, numIterations) {
-    debugger
     for (let iter = 0; iter < numIterations; iter++) {
+      const tempCoeff = {
+    a: a.dataSync()[0],
+    b: b.dataSync()[0],
+    c: c.dataSync()[0],
+    d: d.dataSync()[0],
+  };
+  
+  console.log(tempCoeff);
+      
       // optimizer.minimize is where the training happens.
 
       // The function it takes must return a numerical estimate (i.e. loss)
@@ -126,7 +141,7 @@ async function doALearning() {
       optimizer.minimize(() => {
         // Feed the examples into the model
         const pred = predict(xs);
-        console.log(xs.get(), pred.get());
+        debugger
         return loss(pred, ys);
       });
 
@@ -158,6 +173,39 @@ async function doALearning() {
 }
 
 
+
+
+ function generateData2(numPoints, coeff, sigma = 0.04) {
+  return tf.tidy(() => {
+    const [a, b, c, d] = [
+      tf.scalar(coeff.a), tf.scalar(coeff.b), tf.scalar(coeff.c),
+      tf.scalar(coeff.d)
+    ];
+
+    const xs = tf.randomUniform([numPoints], -1, 1);
+
+    // Generate polynomial data
+    const three = tf.scalar(3, 'int32');
+    const ys = a.mul(xs.pow(three))
+      .add(b.mul(xs.square()))
+      .add(c.mul(xs))
+      .add(d)
+      // Add random noise to the generated data
+      // to make the problem a bit more interesting
+      .add(tf.randomNormal([numPoints], 0, sigma));
+
+    // Normalize the y values to the range 0 to 1.
+    const ymin = ys.min();
+    const ymax = ys.max();
+    const yrange = ymax.sub(ymin);
+    const ysNormalized = ys.sub(ymin).div(yrange);
+
+    return {
+      xs, 
+      ys: ysNormalized
+    };
+  })
+}
 // function learn(xData, yData) {
 //   // Define a model for linear regression.
 //   model = tf.sequential();
