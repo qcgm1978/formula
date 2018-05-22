@@ -35,26 +35,26 @@ function init() {
   NUM_POINTS = parseInt(document.getElementById('points').value || 100);
   
   // Fake the training data. 
-  // 👉 you should play with these numbers if you want to generate a 
+  // 👉 you can play with these numbers if you want to generate a 
   // different initial data set!
   Data.training = generateData(NUM_POINTS, {a: -0.8, b:-0.2, c:0.9, d:0.5});
   
   // Firt, see what our predictions would look like with random coefficients
-  const tempCoeff = {
+  const coeff = {
     a: a.dataSync()[0],
     b: b.dataSync()[0],
     c: c.dataSync()[0],
     d: d.dataSync()[0],
   };
   
-  Data.prediction = generateData(NUM_POINTS, tempCoeff);
+  Data.prediction = generateData(NUM_POINTS, coeff);
   plot();
 }
 
-/***********************
+/*
  * Plots a pretty graph with all the data we have!
  * Uses plotly.js
- ***********************/
+ */
 
 function plot() {
   const trace1 = {
@@ -100,10 +100,6 @@ function plot() {
   Plotly.newPlot('graph', [trace1, trace2, trace3], layout, {displayModeBar: false});
 }  
 
-/***********************
- * Plots a pretty graph with all the data we have!
- * Uses plotly.js
- ***********************/
 /*
  * Generates data according to the formula:
  * y = a * x ^ 3 + b * x^2 + c * x + d
@@ -113,13 +109,16 @@ function generateData(points, {a, b, c, d}) {
   let y = [];
   
   // Normalize the x values to be between -1 and 1.
-  // This is super important! If you don't do this everything breaks
-  const xs = tf.randomUniform([points], -1, 1);
+  // 🚨 This is super important! TensorFlow requires this
+  // for the algorithm to work, and if you don't do this
+  // you learn NaN for every coefficient.
+  const xs = tf.randomUniform([points], -1, 1);  // magic TF to give you points between [-1, 1]
   for (let i = 0; i < points; i++) {
-    x[i] = xs.get(i);
+    x[i] = xs.get(i);  // goes from a TF tensor (i.e. array) to a number.
   }
   x = x.sort(function(a,b){return a - b})
   
+  // Generate the random y values.  
   for (let i = 0; i < points; i++) {
     const val = x[i];
     y[i] = a * (val*val*val) + b * (val*val) + c * val + d;
@@ -137,26 +136,51 @@ function generateData(points, {a, b, c, d}) {
   
   return {x:x, y:y}
 }
+
+/*
+ * Learn the coefficients.
+ * Very much based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
+ */
+function doALearning() {
+  // Create an optimizer. This is the thing that does the learning.
+  // 👉 you can play with these two numbers if you want to change the 
+  // rate at which the algorithm is learning
   
-// Based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
-async function doALearning() {
-  // Create an optimizer, we will use this later. You can play
-  // with some of these values to see how the model perfoms.
+  // How many passes through the data we're doing.
   const numIterations = parseInt(document.getElementById('iterations').value || 75);
+  
+  // How fast we are learning.
   const learningRate = 0.5;
+  
+  /* 
+    Docs: https://js.tensorflow.org/api/0.11.1/#train.sgd
+    - sgd means "stochastic gradient descent". 
+    - stochastic means "probabilistic"
+    - gradient descent means that at every step, we move our predictions 
+    in the direction of the answer. How much to move involves derivatives (the "gradient")
+    - the full algorithm is here but it's...mathy: https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+    - this is why having tensorflow is good!!
+  */ 
   const optimizer = tf.train.sgd(learningRate); 
   
+  // Use the training data, and do numIteration passes over it. 
   await train(tf.tensor1d(trainingData.x), tf.tensor1d(trainingData.y), numIterations);
   
+  // Once that is done, this has updated our coefficients! 
   // Here you could see what our predictions look like now, and use them!
-  const tempCoeff = {
-    a: a.dataSync()[0],
-    b: b.dataSync()[0],
-    c: c.dataSync()[0],
-    d: d.dataSync()[0],
-  };
+  // Example:
+  // const coeff = {
+  //   a: a.dataSync()[0],
+  //   b: b.dataSync()[0],
+  //   c: c.dataSync()[0],
+  //   d: d.dataSync()[0],
+  // };
+  // prediction = generateData(NUM_POINTS, coeff);
+  // plot();
   
-  // This trains the model.
+  /*
+   * This does the training of the model.
+   */
   async function train(xs, ys, numIterations) {
     for (let iter = 0; iter < numIterations; iter++) {
       const tempCoeff = {
@@ -168,18 +192,21 @@ async function doALearning() {
       learningData = generateData(NUM_POINTS, tempCoeff);
       plot();
   
+      
       // optimizer.minimize is where the training happens.
 
-      // The function it takes must return a numerical estimate (i.e. loss)
-      // of how well we are doing using the current state of
-      // the variables we created at the start.
 
       // This optimizer does the 'backward' step of our training process
       // updating variables defined previously in order to minimize the
       // loss.
+      // This is where the step happens, and when the training takes place.
+      // 
       optimizer.minimize(() => {
-        // Feed the examples into the model
+        // Using our estimated coeff, predict all the ys for all the xs 
         const pred = predict(xs);
+        
+        // Need to return the loss i.e how bad is our prediction from the 
+        // correct answer.
         return loss(pred, ys);
       });
 
