@@ -44,9 +44,9 @@
       <a href="https://js.tensorflow.org/tutorials/fit-curve.html">TensorFlow</a> site but with waaaaay more
       code comments and a prettier graph). 
       <br><br>
-      We are given a bunch of points (for a bunch of numbers between -1 and 1, calculate a <code>y</code> according to 
-      <code>y = a * x^3 + b * x^2 + c * x + d</code>) -- we know this is the secret formula but we don't know the 
-      values of those <code>a,b,c,d</code> coefficients.
+      We are given a bunch of points (for <code>x</code> between -1 and 1, calculate a <code>y</code> according to 
+      <code>y = a * x^3 + b * x^2 + c * x + d</code> -- we know this is the secret formula but we don't know the 
+      values of those <code>a,b,c,d</code> coefficients.)
       Our goal is to learn these coefficients, so that if we're given a new <code>x</code> value, we can say what the <code>y</code> 
       value should be.</p>
       
@@ -89,7 +89,7 @@
           <li>We have to figure out the <b>"features"</b> of the secret formula that generated the data we were given, so that we 
           can learn them. In my opinion, this is like 80% of the complexity of solving an ML problem. In this example, we were told the 
             shape of the secret formula (it's a cubic!), so the features we have to learn are the coefficients in the polynomial. For something more 
-          complex like the "is this dog a blueberry muffin" problem, we'd have to look at pixels and colours and formations and what
+          complex like the "is this a dog or a blueberry muffin" problem, we'd have to look at pixels and colours and formations and what
           makes a dog a dog and not a muffin.</li>
           <li>Once we figure out these features (in our case, those <code>a,b,c,d</code> coefficients), we initialize them to some 
             random values. We could now use them to make 
