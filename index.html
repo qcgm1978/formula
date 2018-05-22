@@ -54,9 +54,19 @@
       The <b>blue</b> dots are the training points we were given. The <b>red</b> dots would be our guesses,
       based on our initial, default coefficients (hella incorrect!). Once you click the <code>train</code>
       button, the <b>green</b> dots show how our coefficients are getting better. After you see the default
-      example, check what happens if we are given fewer data points or fewer iterations!
+      example, check what happens if you change the shape of the data, or we are given fewer data points or fewer iterations! 
     </p>
-    
+  
+    <div class="input-container formula">
+      <b>Secret formula: </b>
+      <code>
+      <b>a</b> * <input id="a" placeholder="-0.8" value="-0.8" onchange="init()">* x<sup>3</sup> + 
+      <b>a</b> * <input id="b" placeholder="-0.2" value="-0.2" onchange="init()">* x<sup>2</sup> + 
+      <b>a</b> * <input id="c" placeholder="0.9" value="-0.0" onchange="init()">* x + 
+      <input id="d" placeholder="0.5" value="0.5" onchange="init()"> 
+      </code>
+    </div>
+  
     <div class="input-container">
       <label for="points">initial points</label>
       <input id="points" placeholder="100" value="100" type="number" onchange="init()">

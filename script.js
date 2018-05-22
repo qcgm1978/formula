@@ -33,6 +33,9 @@ init();
 
 function init() {
   NUM_POINTS = parseInt(document.getElementById('points').value || 100);
+  const defaultCoeffs = {
+    a: arseInt(document.getElementById('points').value || 100);, b:-0.2, c:0.9, d:0.5
+  }
   
   // Fake the training data. 
   // 👉 you can play with these numbers if you want to generate a 

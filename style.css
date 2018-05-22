@@ -48,9 +48,13 @@ code {
   font-size: 16px;
 }
 
+.formula code {
+  background: transparent; 
+  color: black;
+}
+
 .input-container {
   display: inline-block;
-  margin: 0 20px;
 }
 
 label {
@@ -69,6 +73,11 @@ input {
   border-bottom: 2px solid #F06292;
   width: 80px;
 }
+
+.formula input {
+  width: 60;
+}
+
 button {
   background: #F06292;
   color: white;
