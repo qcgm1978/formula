@@ -34,13 +34,16 @@ init();
 function init() {
   NUM_POINTS = parseInt(document.getElementById('points').value || 100);
   const defaultCoeffs = {
-    a: arseInt(document.getElementById('points').value || 100);, b:-0.2, c:0.9, d:0.5
+    a: parseFloat(document.getElementById('i_a').value || -0.8),
+    b: parseFloat(document.getElementById('i_b').value || -0.2),
+    c: parseFloat(document.getElementById('i_c').value || 0.9),
+    d: parseFloat(document.getElementById('i_d').value || 0.5)
   }
   
   // Fake the training data. 
   // 👉 you can play with these numbers if you want to generate a 
   // different initial data set!
-  Data.training = generateData(NUM_POINTS, {a: -0.8, b:-0.2, c:0.9, d:0.5});
+  Data.training = generateData(NUM_POINTS, defaultCoeffs);
   
   // Firt, see what our predictions would look like with random coefficients
   const coeff = {
