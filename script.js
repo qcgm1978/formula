@@ -14,9 +14,9 @@ you can play around with!
 
 // Sup globals. Fight me. Plots are hard.
 const Data = {
-  training: {x:[], y:[]},   // the initial data set we're given
-  prediction: {x:[], y:[]}, // what we're predicting based on the coefficients
-  learning: {x:[], y:[]}    // what we're predicting while learning.
+  training: { x: [], y: [] },   // the initial data set we're given
+  prediction: { x: [], y: [] }, // what we're predicting based on the coefficients
+  learning: { x: [], y: [] }    // what we're predicting while learning.
 }
 
 let NUM_POINTS;             // how many data points in the set.
@@ -31,20 +31,32 @@ const d = tf.variable(tf.scalar(Math.random()));
 
 init();
 
+
 function init() {
   NUM_POINTS = parseInt(document.getElementById('points').value || 100);
+  // arr=[-.8,-.2,.9,.5]
+  arr = tf.randomUniform([4], -1, 1).dataSync()
   const defaultCoeffs = {
-    a: parseFloat(document.getElementById('i_a').value || -0.8),
-    b: parseFloat(document.getElementById('i_b').value || -0.2),
-    c: parseFloat(document.getElementById('i_c').value || 0.9),
-    d: parseFloat(document.getElementById('i_d').value || 0.5)
+    a: parseFloat( arr[0]),
+    b: parseFloat( arr[1]),
+    c: parseFloat( arr[2]),
+    d: parseFloat( arr[3])
   }
-  
+  arr1 = ['a', 'b', 'c', 'd']
+  for (i = 0; i < arr1.length; i++) {
+    const val = arr1[i];
+    const ele = document.getElementById(`i_${val}`);
+
+    ele.value = defaultCoeffs[val]
+    ele.setAttribute('placeholder' , defaultCoeffs[val])
+
+  }
+
   // Fake the training data. 
   // 👉 you can play with these numbers if you want to generate a 
   // different initial data set!
   Data.training = generateData(NUM_POINTS, defaultCoeffs);
-  
+
   // Firt, see what our predictions would look like with random coefficients
   const coeff = {
     a: a.dataSync()[0],
@@ -52,7 +64,7 @@ function init() {
     c: c.dataSync()[0],
     d: d.dataSync()[0],
   };
-  
+
   Data.prediction = generateData(NUM_POINTS, coeff);
   plot();
 }
@@ -68,7 +80,7 @@ function plot() {
     y: Data.training.y,
     mode: 'lines+markers',
     name: 'Training',
-    marker: { size: 12, color:'#29B6F6' }
+    marker: { size: 12, color: '#29B6F6' }
   };
 
   const trace2 = {
@@ -78,7 +90,7 @@ function plot() {
     name: 'Initial Prediction',
     marker: { size: 12, color: '#F06292' }
   };
-  
+
   let trace3 = {};
   if (Data.learning) {
     trace3 = {
@@ -89,31 +101,31 @@ function plot() {
       marker: { size: 12, color: '#00E676' }
     };
   }
-  
+
   const layout = {
     margin: {
-      l: 20, r: 0, b: 0, t: 0, 
-      pad:0
+      l: 20, r: 0, b: 0, t: 0,
+      pad: 0
     },
     legend: {
-				xanchor:"left",
-				yanchor:"top",
-				y: 1,  //tbh i don't know what these numbers mean?!
-        x: 0,
-				orientation: "v"
-	  },
+      xanchor: "left",
+      yanchor: "top",
+      y: 1,  //tbh i don't know what these numbers mean?!
+      x: 0,
+      orientation: "v"
+    },
   };
-  Plotly.newPlot('graph', [trace1, trace2, trace3], layout, {displayModeBar: false});
-}  
+  Plotly.newPlot('graph', [trace1, trace2, trace3], layout, { displayModeBar: false });
+}
 
 /*
  * Generates data according to the formula:
  * y = a * x ^ 3 + b * x^2 + c * x + d
  */
-function generateData(points, {a, b, c, d}) {
+function generateData(points, { a, b, c, d }) {
   let x = [];
   let y = [];
-  
+
   // Normalize the x values to be between -1 and 1.
   // 🚨 This is super important! TensorFlow requires this
   // for the algorithm to work, and if you don't do this
@@ -122,25 +134,25 @@ function generateData(points, {a, b, c, d}) {
   for (let i = 0; i < points; i++) {
     x[i] = xs.get(i);  // goes from a TF tensor (i.e. array) to a number.
   }
-  x = x.sort(function(a,b){return a - b})
-  
+  x = x.sort(function (a, b) { return a - b })
+
   // Generate the random y values.  
   for (let i = 0; i < points; i++) {
     const val = x[i];
-    y[i] = a * (val*val*val) + b * (val*val) + c * val + d;
+    y[i] = a * (val * val * val) + b * (val * val) + c * val + d;
   }
-  
+
   // Normalize the y values to be between 0 and 1
   const ymin = Math.min(...y);
   const ymax = Math.max(...y);
   const yrange = ymax - ymin;
-  
+
   for (let i = 0; i < points; i++) {
     const val = y[i];
     y[i] = (y[i] - ymin) / yrange;
   }
-  
-  return {x:x, y:y}
+
+  return { x: x, y: y }
 }
 
 /*
@@ -151,13 +163,13 @@ async function doALearning() {
   // Create an optimizer. This is the thing that does the learning.
   // 👉 you can play with these two numbers if you want to change the 
   // rate at which the algorithm is learning
-  
+
   // How many passes through the data we're doing.
   const numIterations = parseInt(document.getElementById('iterations').value || 75);
-  
+
   // How fast we are learning.
   const learningRate = 0.5;
-  
+
   /* 
     Docs: https://js.tensorflow.org/api/0.11.1/#train.sgd
     - sgd means "stochastic gradient descent". 
@@ -166,12 +178,12 @@ async function doALearning() {
     in the direction of the answer. How much to move involves derivatives (the "gradient")
     - the full algorithm is here but it's...mathy: https://en.wikipedia.org/wiki/Stochastic_gradient_descent
     - this is why having tensorflow is good!!
-  */ 
-  const optimizer = tf.train.sgd(learningRate); 
-  
+  */
+  const optimizer = tf.train.sgd(learningRate);
+
   // Use the training data, and do numIteration passes over it. 
   await train(tf.tensor1d(Data.training.x), tf.tensor1d(Data.training.y), numIterations);
-  
+
   // Once that is done, this has updated our coefficients! 
   // Here you could see what our predictions look like now, and use them!
   // Example:
@@ -183,7 +195,7 @@ async function doALearning() {
   // };
   // Data.prediction = generateData(NUM_POINTS, coeff);
   // plot();
-  
+
   /*
    * This does the training of the model.
    */
@@ -198,12 +210,12 @@ async function doALearning() {
       };
       Data.learning = generateData(NUM_POINTS, coeff);
       plot();
-  
+
       // Learn! This is where the step happens, and when the training takes place.
       optimizer.minimize(() => {
         // Using our estimated coeff, predict all the ys for all the xs 
         const pred = predict(xs);
-        
+
         // Need to return the loss i.e how bad is our prediction from the 
         // correct answer. The optimizer will then adjust the coefficients
         // to minimize this loss.
@@ -213,8 +225,11 @@ async function doALearning() {
       // Use tf.nextFrame to not block the browser.
       await tf.nextFrame();
     }
+    document.getElementById('pred-coef').innerText = arr1.reduce((acc, item) => {
+      return acc+=eval(item).dataSync()[0].toFixed(2)+', '
+    },'')
   }
-  
+
   /*
    * Predicts all the y values for all the x values.
    */
@@ -229,7 +244,7 @@ async function doALearning() {
         .add(d);
     });
   }
-  
+
   /*
    * Loss function: how good the prediction is based on what you expected.
    */
@@ -240,7 +255,7 @@ async function doALearning() {
     // see https://en.wikipedia.org/wiki/Mean_squared_error.
     // There are other error functions you could use, but if you're doing numeric things,
     // MSE is one of the best and also the easiest.
-    
+
     // Also, this is also why TensorFlow is great! Doing this by hand sucks!
     const error = prediction.sub(labels).square().mean();
     return error;
