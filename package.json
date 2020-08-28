@@ -1,0 +1,38 @@
+{
+  "name": "hospitable-kindhearted-pea",
+  "version": "1.0.0",
+  "description": "hello tensorflow =================",
+  "main": "plotly-geo.js",
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "jest-chain"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qcgm1978/formula.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qcgm1978/formula/issues"
+  },
+  "homepage": "https://github.com/qcgm1978/formula#readme",
+  "dependencies": {
+    "@tensorflow/tfjs": "^2.3.0",
+    "jest": "^26.4.2",
+    "jest-chain": "^1.1.5",
+    "tfjs": "^0.6.0"
+  }
+}
