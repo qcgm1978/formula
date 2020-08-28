@@ -104,7 +104,7 @@ function plot() {
 
   const layout = {
     margin: {
-      l: 20, r: 0, b: 0, t: 0,
+      l: 20, r: 0, b: 40, t: 0,
       pad: 0
     },
     legend: {
@@ -113,6 +113,15 @@ function plot() {
       y: 1,  //tbh i don't know what these numbers mean?!
       x: 0,
       orientation: "v"
+    },
+    xaxis: {
+      autotick: false,
+      ticks: "outside",
+      tick0: 0,
+      dtick: 0.25,
+      ticklen: 8,
+      tickwidth: 4,
+      tickcolor: "#000"
     },
   };
   Plotly.newPlot('graph', [trace1, trace2, trace3], layout, { displayModeBar: false });
