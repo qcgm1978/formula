@@ -15,10 +15,19 @@ it(`The optimizer will then adjust the value of a to minimize this loss`, () => 
   const varList = [a]
   optimizer.minimize(() => {
     // Need to return the loss i.e how bad is our prediction from the correct answer.
-    // return pred.sub(1).square().mean();
     return a;
   }, returnCost, varList);
   const data2 = a.dataSync();
   expect(data2).not.toEqual(data1)
   console.log(data1, data2)
+  const f = () => optimizer.minimize(() => {
+    // Need to return the loss i.e how bad is our prediction from the correct answer.
+  }, returnCost, varList);
+  const f1 = () => optimizer.minimize(() => {
+    // Need to return the loss i.e how bad is our prediction from the correct answer.
+    return tf.scalar(1)
+  }, returnCost, varList);
+  expect(f).toThrowError('The result y returned by f() must be a tensor')
+  expect(f1).toThrowError('Cannot find a connection between any variable and the result of the loss function y=f(x). Please make sure the operations that use variables are inside the function f passed to minimize().')
+
 });
