@@ -34,5 +34,8 @@
     "jest": "^26.4.2",
     "jest-chain": "^1.1.5",
     "tfjs": "^0.6.0"
+  },
+  "devDependencies": {
+    "os": "^0.1.1"
   }
 }

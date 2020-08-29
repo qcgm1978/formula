@@ -1,5 +1,6 @@
+// Just disables the warning, doesn't enable AVX/FMA
+// export TF_CPP_MIN_LOG_LEVEL=2
 const tf = require('@tensorflow/tfjs-node')
-// tf = require('tfjs');
 it(`tf`, () => {
   expect(tf instanceof Object).toBeFalsy()
   expect(tf.tidy).toBeInstanceOf(Function)
