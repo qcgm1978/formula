@@ -32,7 +32,6 @@ it(`The optimizer will then adjust the value of a to minimize this loss`, () => 
   });
   expect(f).toThrowError('The result y returned by f() must be a tensor')
   expect(f1).toThrowError('Cannot find a connection between any variable and the result of the loss function y=f(x). Please make sure the operations that use variables are inside the function f passed to minimize().')
-
 });
 it(`minimize`, () => {
   const a = tf.variable(tf.scalar(Math.random()));
@@ -42,4 +41,10 @@ it(`minimize`, () => {
     return a.add(tf.tensor1d([1, 2, 3]))
   });
   expect(f).toThrowError('The f passed in variableGrads(f) must return a scalar, but it returned a rank-1 tensor');
+})
+it(`Computes the mean of elements across dimensions of a tf.Tensor.`, () => {
+  const x = tf.tensor1d([1, 2, 3]);
+  const mean = x.mean().dataSync();
+  expect(mean[0]).toEqual(2)
+  expect(x.mean().rank).toEqual(0)
 })
