@@ -26,7 +26,7 @@ it(`The optimizer will then adjust the value of a to minimize this loss`, () => 
   const f1 = () => optimizer.minimize(() => {
     // Need to return the loss i.e how bad is our prediction from the correct answer.
     return tf.scalar(1)
-  }, returnCost, varList);
+  });
   expect(f).toThrowError('The result y returned by f() must be a tensor')
   expect(f1).toThrowError('Cannot find a connection between any variable and the result of the loss function y=f(x). Please make sure the operations that use variables are inside the function f passed to minimize().')
 
