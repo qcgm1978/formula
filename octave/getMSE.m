@@ -1,0 +1,1 @@
+function mse=getMSE(pred,actual)  minusSquare = (pred-actual).^2;  sumVal = sum(minusSquare);  mse=sumVal / length(sumVal);endfunction
